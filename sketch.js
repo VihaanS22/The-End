@@ -54,7 +54,7 @@ function draw() {
 
 
  if(gameState === "play"){  
-  
+  camera.position.y = man.y
   score = score + Math.round(getFrameRate()/60);
   line2.visible = false
   line1.visible = false
@@ -83,25 +83,40 @@ if(keyDown("down")){
    }
   if(man.isTouching(police)){
     policeSound.stop()
-    man.velocityX = 0
-    road.velocityX = 0
-    score = 0
-   man.visible = false
-    fill("white")
-    text("YOU HAVE BEEN CAUGHT. BETTER LUCK NEXT TIME! PRESS F5 KEY TO PLAY AGAIN", 400, 350) 
-
+   gameState = "caught"
   }
   
  if(score >=2000){
  policeSound.stop()
 
-  man.velocityX = 6
-  score = 2000
- fill("white")
+man.velocityX = 6
+score = 2000
+fill("white")
 text("YOU ESCAPED. GOOD JOB!!", 350, 350)
 road.velocityX = 0
-
+gameState = "end"
  }
+ }
+ if(gameState === "caught"){
+
+  cars.destroyEach()
+  man.velocityX = 0
+      road.velocityX = 0
+      score = 0
+     man.visible = false
+      fill("white")
+      text("YOU HAVE BEEN CAUGHT. BETTER LUCK NEXT TIME! PRESS F5 KEY TO PLAY AGAIN", 400, 350) 
+  }
+  
+  if(gameState === "end"){
+    cars.destroyEach()
+    man.velocityX = 6
+    score = 2000
+   fill("white")
+  text("YOU ESCAPED. GOOD JOB!!", 350, 350)
+  road.velocityX = 0
+  }
+console.log(gameState)
 
   man.velocityY = man.velocityY + 0.1 
   
@@ -116,15 +131,13 @@ road.velocityX = 0
   
   drawSprites();
 
-
-
-
 textSize(20)
 fill("black")
- text("SCORE:"+ score, 20, 20)   
+ text("SCORE:"+ score, 20, 330)   
   
-  }
-
+  
+ 
+}
 function carGroup(){
  
   if (frameCount % 200 === 0) {
@@ -145,5 +158,5 @@ car.scale = 1.2
   }
 }
 
-}
+
 
